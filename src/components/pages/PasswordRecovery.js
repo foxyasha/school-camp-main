@@ -31,7 +31,7 @@ const PasswordRecovery = () => {
 
     };
     return (
-        <div className={'modal login'}>
+        <div className={'modalwindow login'}>
             <div className={'form'}>
                 <div className={'form_content'}>
                     <h1>Сброс пароля</h1>
@@ -42,10 +42,7 @@ const PasswordRecovery = () => {
                 </div>
             </div>
             <Link to = "/">
-                <div className={'btn-close'}>
-                    <div/>
-                    <div/>
-                </div>
+                <div className={'btn-close'}/>
             </Link>
 
         </div>

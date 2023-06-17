@@ -10,7 +10,9 @@ const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [user, loading] = useAuthState(auth);
+    const [user] = useAuthState(auth);
+
+
 
     const onLogin = (e) => {
         e.preventDefault();
@@ -32,17 +34,14 @@ const Login = () => {
 
     }
 
-    const handleLogout = () => {
-        signOut(auth).then(() => {
-            navigate("/");
-            ValidData("Вы успешно вышли из аккаунта", true)
-        }).catch((error) => {
 
-        });
+
+    if (user){
+        navigate("/")
     }
 
         return (
-            <div className={'modal login'}>
+            <div className={'modalwindow login'}>
                 <div className={'form'}>
                     <div className={'form_content'}>
                         <h1>Вход</h1>
@@ -51,16 +50,13 @@ const Login = () => {
                             <input placeholder={'Пароль'} type={'password'} onChange={(e)=> setPassword(e.target.value)} required/>
                             <button className={'button'} type={'button'} onClick={onLogin}>Войти</button>
                             <footer>
-                                <p>Забыли пароль?<Link to="/recovery"> Восстановление пароля</Link></p>
+                                <p>Забыли пароль?<Link to="/recovery" > Восстановление пароля</Link></p>
                             </footer>
                         </form>
                     </div>
                 </div>
                 <Link to = "/">
-                    <div className={'btn-close'}>
-                        <div/>
-                        <div/>
-                    </div>
+                    <div className={'btn-close'}/>
                 </Link>
 
             </div>

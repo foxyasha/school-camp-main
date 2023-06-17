@@ -1,11 +1,10 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {  createUserWithEmailAndPassword   } from 'firebase/auth';
-import {addDoc, serverTimestamp, collection, doc, updateDoc, getDoc} from "firebase/firestore"
+import {addDoc, collection} from "firebase/firestore"
 import ValidData from "../../ValidData";
 import {auth, db} from "../UI/firebaseConfig";
 import {Link, useNavigate} from "react-router-dom";
-import {Form} from "react-bootstrap";
-import {isDisabled} from "@testing-library/user-event/dist/utils";
+import {useAuthState} from "react-firebase-hooks/auth";
 
 const initialState = {
     name: "",
@@ -13,7 +12,7 @@ const initialState = {
     patronymic: "",
     birthday: "",
     phone: "",
-    role: false,
+    role: false
 };
 
 const Registration = () => {
@@ -24,6 +23,9 @@ const Registration = () => {
     const [data, setData] = useState(initialState);
     const {name, surname, patronymic, birthday, phone, role} = data;
     const [isSubmit, setIsSubmit] = useState(false);
+    const [user] = useAuthState(auth);
+
+
 
     const handleClick = (e) =>{
         setData({ ...data, [e.target.name]: e.target.value });
@@ -31,22 +33,24 @@ const Registration = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault()
-        await addDoc(collection(db, "Users"), {
-            ...data,
-            name,
-            surname,
-            patronymic,
-            birthday,
-            phone,
-            role
-        })
         await createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                const user = userCredential.user;
+                const userUid = auth.currentUser?.uid;
+                addDoc(collection(db, "Users"), {
+                    ...data,
+                    userUid,
+                    name,
+                    surname,
+                    patronymic,
+                    birthday,
+                    phone,
+                    role
+                })
                 ValidData('Вы успешно зарегистрировались', true);
                 navigate("/login")
 
             })
+
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
@@ -66,27 +70,36 @@ const Registration = () => {
                 if(errorCode == 'auth/weak-password')
                     return ValidData('Пароль должен содержать более 6 символов', false);
 
+
                 if(errorCode == 'auth/email-already-in-use')
                     return ValidData('Данный E-mail уже существует', false);
+
             });
 
+
+    }
+
+
+    if (user){
+        navigate("/")
     }
 
 
 
     return (
-        <div className={'modal login'}>
+
+        <div className={'modalwindow login'}>
             <div className={'form'}>
                 <div className={'form_content'}>
                     <h1>Регистрация</h1>
                     <form>
-                        <input placeholder={'E-mail'} type={'email'} onChange={(e)=> setEmail(e.target.value)} required/>
-                        <input placeholder={'Пароль'} type={'password'} onChange={(e)=> setPassword(e.target.value)} required/>
-                        <input placeholder={'Имя'} type={'text'} onChange={handleClick} value={name} name="name" required/>
-                        <input placeholder={'Фамилия'} type={'text'} onChange={handleClick} value={surname} name="surname" required/>
-                        <input placeholder={'Отчество'} type={'text'} onChange={handleClick} value={patronymic} name="patronymic" required/>
-                        <input placeholder={'День рождения дд.мм.гггг'} type={'date'} onChange={handleClick} value={birthday} name="birthday" required/>
-                        <input placeholder={'Номер телефона'} type={'text'} onChange={handleClick} value={phone} required name="phone"/>
+                        <input placeholder={'E-mail'} type={'email'} required onChange={(e)=> setEmail(e.target.value)} />
+                        <input placeholder={'Пароль'} type={'password'} required onChange={(e)=> setPassword(e.target.value)} maxLength={30}  />
+                        <input placeholder={'Имя'} type={'text'} required onChange={handleClick} value={name} name="name" maxLength={16} />
+                        <input placeholder={'Фамилия'} type={'text'} required onChange={handleClick} value={surname} maxLength={18} name="surname" />
+                        <input placeholder={'Отчество'} type={'text'} required onChange={handleClick} value={patronymic} maxLength={18} name="patronymic" />
+                        <input placeholder={'День рождения дд.мм.гггг'} required type={'date'} onChange={handleClick} value={birthday} name="birthday" />
+                        <input placeholder={'Номер телефона'} type={'text'} required onChange={handleClick} value={phone} maxLength={11} name="phone"/>
                         <button className={'button'} type={'button'} onClick={onSubmit} >Зарегистрироваться</button>
                         <footer>
                             <p>Уже зарегистрированы?<Link to="/login"> Войти</Link></p>
@@ -95,10 +108,7 @@ const Registration = () => {
                 </div>
             </div>
             <Link to = "/">
-                <div className={'btn-close'}>
-                    <div/>
-                    <div/>
-                </div>
+                <div className={'btn-close'}/>
             </Link>
 
         </div>

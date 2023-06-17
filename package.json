@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@syncfusion/ej2-react-schedule": "^21.2.10",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "bootstrap": "^5.3.0",
     "firebase": "^9.22.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
@@ -13,6 +15,7 @@
     "react-firebase-hooks": "^5.1.1",
     "react-router-dom": "^6.11.2",
     "react-scripts": "5.0.1",
+    "swiper": "^9.3.2",
     "toastify-js": "^1.12.0",
     "web-vitals": "^2.1.4"
   },
