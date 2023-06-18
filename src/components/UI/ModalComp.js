@@ -53,7 +53,7 @@ const Modal =({open,close, id}) => {
                 parentUID,
                 timestamp: serverTimestamp()
             })
-            ValidData('Ребенок добавлен!', true)
+                ValidData('Ребенок добавлен!', true)
         }else{
             try{
                 await updateDoc(doc(db,"Childrens", id),{

@@ -1,5 +1,5 @@
 import React, {Component, useEffect, useState} from 'react';
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, db} from "./firebaseConfig";
 import {addDoc, collection, serverTimestamp, setDoc, doc, updateDoc, getDoc, onSnapshot} from "firebase/firestore";
@@ -25,7 +25,8 @@ const ModalTicket =({open,close, id}) => {
     const [loadings, setLoading] = useState(true);
     const [camps, setCamps] = useState([]);
     const [childrens, setChildrens] = useState([]);
-
+    const [selectedChild, setselectedChild] = useState([]);
+    const [selectedCamp, setselectedCamp] = useState([]);
 
     useEffect(()=>{
         setLoading(true);
@@ -43,7 +44,6 @@ const ModalTicket =({open,close, id}) => {
             unsub();
         }
     }, []);
-
 
     useEffect(()=>{
         setLoading(true);
@@ -64,7 +64,6 @@ const ModalTicket =({open,close, id}) => {
         }
     }, []);
 
-
     if (!open) return null;
     function increment(){
         setCount(count + 1)
@@ -75,78 +74,60 @@ const ModalTicket =({open,close, id}) => {
         }
     }
 
-
-
-    const submitTicket = async (e) => {
+    const submitTicket = async (e, camps) => {
         e.preventDefault();
         await addDoc(collection(db, "Tickets"), {
-            ...data,
+            Date: new Date().toISOString().slice(0, 10),
+            ChildrenUID: selectedChild.id,
+            CampTypeUID: camps.id,
             timestamp: serverTimestamp()
         })
         ValidData('Ваш билет был добавлен', true)
     }
 
-
-    function openWindow() {
-        document.getElementById("childrenDropdown").classList.toggle("show");
-    }
-
-    window.onclick = function(event) {
-        if (!event.target.matches('.dropbtn')) {
-
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
-                }
-            }
-        }
-    }
-
-
-
     return (
         loadings ? <Loader/> :
-                <div className='overlay modalBack modalAnimation'>
-                    <div className='modalContainer  '>
-                        <div className='modalRight '>
-                            <button className={'closeBtn btn-close'} onClick={close}/>
-                            <div className='content'>
-                                <h1 style={{marginBottom: "20px"}}>Доступные отряды</h1>
-                                {camps && camps.map((camps)=>(
-                                    <Form>
-                                        <h4>{camps.Title}</h4>
-                                        <h5>Цена: {camps.Price}</h5>
+            <div className='overlay modalBack modalAnimation'>
+                <div className='modalContainer  '>
+                    <div className='modalRight '>
+                        <button className={'closeBtn btn-close'} onClick={close}/>
+                        <div className='content'>
+                            <h1 style={{marginBottom: "20px"}}>Доступные отряды</h1>
+                            <div className="d-flex" style={{width:"100%"}}>
+                                <h4>Ребенок: </h4>
+                                <select className="form-select" aria-label="Default select example" style={{marginLeft:"10px"}}>
+                                    <option selected>{selectedChild.name || 'Выберите ребенка'}</option>
+                                    {childrens && childrens.map((childrens)=>
+                                        <option onClick={() => setselectedChild(childrens)}>{childrens.name}</option>
+                                    )}
+                                </select>
+                            </div>
+                            <br/>
+                            {camps && camps.map((camps)=>(
+                                <Form>
+                                    <h4>{camps.Title}<Link style={{fontSize:"20px", marginLeft:"5px"}} to={"/camps"}>Подробнее</Link></h4>
+                                    <h5>Цена: {camps.Price}</h5>
+                                    <div className={'d-flex'}>
                                         <Image className="imgcampmodal" src={camps.Image}/>
-                                        <button onClick={() => navigate("/camps")} className={'button'} style={{width: "150px", height: "50px", fontWeight: "500", fontSize: "18px", float: "right", marginRight: "10px"}} >Подробнее</button>
-                                        <button onClick={submitTicket} className={'button'} style={{width: "150px", height: "50px", fontWeight: "500", fontSize: "18px", float: "right", marginRight: "10px"}} >Добавить</button>
-                                        <div className="dropdown">
-                                            <button className="button dropbtn" onClick={openWindow}>Информация</button>
-                                                <div id="childrenDropdown" className="dropdown-content">
-                                                    {childrens && childrens.map((childrens)=>
-                                                        <a>{childrens.name}</a>
-                                                    )}
+                                        <div style={{display:"flex", justifyContent:"end", alignItems:"end", marginBottom:"10px"}}>
+                                            <div className={'d-flex '} >
+                                                <button onClick={(e) => submitTicket(e, camps)} className={'button'} style={{width: "300px" ,height: "50px", fontWeight: "500", fontSize: "18px"}}>Добавить ребенка</button>
                                             </div>
                                         </div>
-                                        <hr/>
-                                    </Form>
-                                ))}
-                            </div>
-                        </div>
 
+                                    </div>
+                                    <hr/>
+                                </Form>
+                            ))}
+                        </div>
                     </div>
+
                 </div>
+            </div>
 
     );
 };
 
-
-
-
 export default ModalTicket;
-
-
 
 
