@@ -58,6 +58,8 @@ const Registration = () => {
                 console.log(errorCode)
                 console.log(errorMessage)
 
+
+
                 if(errorCode == 'auth/invalid-email')
                     return ValidData('Некорректный E-mail', false);
 
@@ -92,15 +94,15 @@ const Registration = () => {
             <div className={'form'}>
                 <div className={'form_content'}>
                     <h1>Регистрация</h1>
-                    <form>
-                        <input placeholder={'E-mail'} type={'email'} required onChange={(e)=> setEmail(e.target.value)} />
-                        <input placeholder={'Пароль'} type={'password'} required onChange={(e)=> setPassword(e.target.value)} maxLength={30}  />
-                        <input placeholder={'Имя'} type={'text'} required onChange={handleClick} value={name} name="name" maxLength={16} />
+                    <form onSubmit={onSubmit}>
+                        <input placeholder={'E-mail'} type={'email'} onChange={(e)=> setEmail(e.target.value)} />
+                        <input placeholder={'Пароль'} type={'password'} onChange={(e)=> setPassword(e.target.value)} maxLength={30}  />
+                        <input placeholder={'Имя'} type={'text'} onChange={handleClick} value={name} name="name" maxLength={16} required />
                         <input placeholder={'Фамилия'} type={'text'} required onChange={handleClick} value={surname} maxLength={18} name="surname" />
                         <input placeholder={'Отчество'} type={'text'} required onChange={handleClick} value={patronymic} maxLength={18} name="patronymic" />
                         <input placeholder={'День рождения дд.мм.гггг'} required type={'date'} onChange={handleClick} value={birthday} name="birthday" />
-                        <input placeholder={'Номер телефона'} type={'text'} required onChange={handleClick} value={phone} maxLength={11} name="phone"/>
-                        <button className={'button'} type={'button'} onClick={onSubmit} >Зарегистрироваться</button>
+                        <input placeholder={'Номер телефона'} type={'text'} required onChange={handleClick} value={phone} minLength={11} maxLength={11} name="phone"/>
+                        <button className={'button'}>Зарегистрироваться</button>
                         <footer>
                             <p>Уже зарегистрированы?<Link to="/login"> Войти</Link></p>
                         </footer>

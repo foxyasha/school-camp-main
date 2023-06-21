@@ -76,45 +76,51 @@ const ModalTicket =({open,close, id}) => {
 
     const submitTicket = async (e, camps) => {
         e.preventDefault();
-        await addDoc(collection(db, "Tickets"), {
-            Date: new Date().toISOString().slice(0, 10),
-            ChildrenUID: selectedChild.id,
-            CampTypeUID: camps.id,
-            timestamp: serverTimestamp()
-        })
-        ValidData('Ваш билет был добавлен', true)
+        console.log(selectedChild)
+        if (selectedChild.length != 0) {
+            await addDoc(collection(db, "Tickets"), {
+                Date: new Date().toISOString().slice(0, 10),
+                ChildrenUID: selectedChild.id,
+                CampTypeUID: camps.id,
+                timestamp: serverTimestamp()
+            })
+            ValidData('Ваш билет был добавлен', true)
+        } else {
+            ValidData('Выберите ребенка', false)
+        }
     }
 
     return (
         loadings ? <Loader/> :
             <div className='overlay modalBack modalAnimation'>
-                <div className='modalContainer  '>
+                <div className='modalContainer'>
                     <div className='modalRight '>
                         <button className={'closeBtn btn-close'} onClick={close}/>
                         <div className='content'>
                             <h1 style={{marginBottom: "20px"}}>Доступные отряды</h1>
                             <div className="d-flex" style={{width:"100%"}}>
                                 <h4>Ребенок: </h4>
-                                <select className="form-select" aria-label="Default select example" style={{marginLeft:"10px"}}>
-                                    <option selected>{selectedChild.name || 'Выберите ребенка'}</option>
-                                    {childrens && childrens.map((childrens)=>
-                                        <option onClick={() => setselectedChild(childrens)}>{childrens.name}</option>
-                                    )}
-                                </select>
+                                <Dropdown style={{marginLeft:"10px", width: '100%'}}>
+                                    <Dropdown.Toggle style={{background: '#1564bf', width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}} className="btn dropdown-toggle" type="button">
+                                        {selectedChild.name || 'Выберите ребенка'}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+
+                                        <Dropdown.Item  onClick={() => setselectedChild([])}>Выберите ребенка</Dropdown.Item>
+                                        {childrens && childrens.map((childrens)=>
+                                            <Dropdown.Item onClick={() => setselectedChild(childrens)}>{childrens.name}</Dropdown.Item>
+                                        )}
+                                    </Dropdown.Menu>
+                                </Dropdown>
                             </div>
                             <br/>
                             {camps && camps.map((camps)=>(
                                 <Form>
                                     <h4>{camps.Title}<Link style={{fontSize:"20px", marginLeft:"5px"}} to={"/camps"}>Подробнее</Link></h4>
                                     <h5>Цена: {camps.Price}</h5>
-                                    <div className={'d-flex'}>
+                                    <div>
                                         <Image className="imgcampmodal" src={camps.Image}/>
-                                        <div style={{display:"flex", justifyContent:"end", alignItems:"end", marginBottom:"10px"}}>
-                                            <div className={'d-flex '} >
-                                                <button onClick={(e) => submitTicket(e, camps)} className={'button'} style={{width: "300px" ,height: "50px", fontWeight: "500", fontSize: "18px"}}>Добавить ребенка</button>
-                                            </div>
-                                        </div>
-
+                                        <button onClick={(e) => submitTicket(e, camps)} style={{marginTop: '10px'}} className={'button'}>Добавить ребенка</button>
                                     </div>
                                     <hr/>
                                 </Form>

@@ -209,7 +209,7 @@ form button {
   min-width: 100%;
   padding: 0 0 15px 0;
   position: absolute;
-  background: rgba(128, 128, 128, 0.57);
+  background: rgb(128, 128, 128);
   border-radius: 0 0 10px 10px;
   font-size: 18px;
   color: #ffffff;
@@ -447,13 +447,12 @@ form button {
 }
 
 .imgcampmodal{
-  border-radius: 20px;
+  border-radius: 10px;
   box-shadow: 0 10px 5px rgba(39, 39, 39, 0.06);
   height: 250px;
-  width: 200px;
-  background-size: cover;
-  background-position: center;
+  width: 100%;
   margin: auto;
+
 }
 
 

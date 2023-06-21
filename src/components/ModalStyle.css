@@ -70,7 +70,7 @@ img {
 .closeBtn {
     position: absolute;
     top: 10px;
-    right: 12px;
+    right: 20px;
     border-color: transparent;
     background-color: transparent;
 }
@@ -80,7 +80,6 @@ img {
     flex-direction: column;
     justify-content: left;
     text-align: left;
-    margin-top: 3rem;
     padding: 1rem 2rem;
     overflow-y: auto;
     max-height: 600px;

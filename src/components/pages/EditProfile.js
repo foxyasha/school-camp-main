@@ -72,8 +72,8 @@ const Registration = () => {
                         <input placeholder={'Имя'} type={'text'} required onChange={handleClick} value={name} name="name" maxLength={16} />
                         <input placeholder={'Фамилия'} type={'text'} required onChange={handleClick} value={surname} maxLength={18} name="surname" />
                         <input placeholder={'Отчество'} type={'text'} required onChange={handleClick} value={patronymic} maxLength={18} name="patronymic" />
-                        <input placeholder={'Номер телефона'} type={'text'} required onChange={handleClick} value={phone} maxLength={11} name="phone"/>
-                        <button className={'button'} type={'button'} onClick={onSubmit} >Редактировать</button>
+                        <input placeholder={'Номер телефона'} type={'text'} required onChange={handleClick} value={phone} minLength={11} maxLength={11} name="phone"/>
+                        <button className={'button'} type={'button'} onClick={onSubmit}>Редактировать</button>
                     </form>
                 </div>
             </div>

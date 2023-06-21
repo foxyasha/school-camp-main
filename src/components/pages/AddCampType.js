@@ -14,6 +14,7 @@ const initialState = {
     Price: "",
     StartDate: "",
     EndDate: "",
+    ScheduleUid: "",
     Image: "",
 };
 
@@ -23,7 +24,7 @@ const AddNews = () => {
     const [progress, setProgress] = useState(null);
     const [isSubmit, setIsSubmit] = useState(false);
     const [data, setData] = useState(initialState);
-    const {Title, Description, Price, StartDate, EndDate} = data;
+    const {Title, Description, Price, StartDate, EndDate, ScheduleUid} = data;
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -115,7 +116,7 @@ const AddNews = () => {
                     <Form onSubmit={handleSubmit} >
                         <input placeholder={'Название'}  type={'text'} onChange={handleClick} value={Title} name="Title"  required/>
                         <input placeholder={'Описание'} type={'text'} onChange={handleClick} value={Description} name="Description" required/>
-                        <input placeholder={'Цена'} type={'text'} onChange={handleClick} value={Price} name="Price" required/>
+                        <input placeholder={'Цена'} type={'number'} onChange={handleClick} value={Price} name="Price" required/>
                         <input placeholder={'Дата начала'} type={'date'} onChange={handleClick} value={StartDate} name="StartDate" required/>
                         <input placeholder={'Дата окончания'} type={'date'} onChange={handleClick} value={EndDate} name="EndDate" required/>
                         <input type={'file'} id="file" onChange={(e)=> setFile(e.target.files[0])} required/>

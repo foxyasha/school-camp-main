@@ -12,6 +12,7 @@ import {signOut} from "firebase/auth";
 import ValidData from "../../ValidData";
 import Modal from "../UI/ModalComp";
 import ModalTicket from "../UI/ModalTicket";
+import ModalMyTickets from "../UI/ModalMyTickets";
 
 
 const initialState = {
@@ -30,6 +31,7 @@ const Profile = () => {
     const navigate = useNavigate();
     const [openModal, setOpenModal] = useState(false)
     const [openModalTicket, setOpenModalTicket] = useState(false)
+    const [openModalMyTicket, setOpenModalMyTicket] = useState(false)
     const [childrens, setChildrens] = useState([]);
     const userUID = auth.currentUser?.uid;
 
@@ -81,6 +83,9 @@ const Profile = () => {
     const handleClickTicket = (item) =>{
         setOpenModalTicket(true)
     }
+    const handleClickMyTicket = (item) =>{
+        setOpenModalMyTicket(true)
+    }
 
 
     const handleDelete = async (id) =>{
@@ -113,6 +118,8 @@ const Profile = () => {
                                 <ul className="profile_menu">
                                     <li onClick={() => handleClick()} className="to-left">Добавить ребенка</li>
                                     <li onClick={() => handleClickTicket()} className="to-left">Доступные отряды</li>
+                                    <li onClick={() => handleClickMyTicket()} className="to-left">Мои билеты</li>
+
                                 </ul>
                             </div>
                         </div>
@@ -164,6 +171,7 @@ const Profile = () => {
                 </Container>
                 <Modal open={openModal} close={() => {setOpenModal(false)}}  />
                 <ModalTicket open={openModalTicket} close={() => {setOpenModalTicket(false)}}  />
+                <ModalMyTickets open={openModalMyTicket} close={() => {setOpenModalMyTicket(false)}}  />
             </div>
     );
 
