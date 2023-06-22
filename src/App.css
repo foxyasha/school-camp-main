@@ -551,3 +551,12 @@ form button {
   justify-content: space-between;
   margin: 20px 0;
 }
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td{
+
+  padding: 10px;
+}

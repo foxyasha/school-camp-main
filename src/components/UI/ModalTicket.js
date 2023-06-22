@@ -1,33 +1,21 @@
 import React, {Component, useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
-import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, db} from "./firebaseConfig";
 import {addDoc, collection, serverTimestamp, setDoc, doc, updateDoc, getDoc, onSnapshot} from "firebase/firestore";
 import ValidData from "../../ValidData";
 import "../ModalStyle.css"
 import {Dropdown, Form, Image} from "react-bootstrap";
 import Loader from "./Loader";
-import Camps from "../pages/Camps";
-import DropdownMenu from "react-bootstrap/DropdownMenu";
 
-const initialState = {
-    Date: "",
-    ChildrenUID: "",
-    CampTypeUID: "",
-};
+
+
 
 const ModalTicket =({open,close, id}) => {
-    const navigate = useNavigate();
-    const [user, loading] = useAuthState(auth);
-    const [count, setCount] = useState(1)
-    const [data, setData] = useState(initialState);
-    const [isSubmit, setIsSubmit] = useState(false);
     const [loadings, setLoading] = useState(true);
     const [camps, setCamps] = useState([]);
     const [childrens, setChildrens] = useState([]);
     const [tickets, setTickets] = useState([]);
     const [selectedChild, setselectedChild] = useState([]);
-    const [selectedCamp, setselectedCamp] = useState([]);
 
     useEffect(()=>{
         setLoading(true);
@@ -83,14 +71,7 @@ const ModalTicket =({open,close, id}) => {
     }, []);
 
     if (!open) return null;
-    function increment(){
-        setCount(count + 1)
-    }
-    function decrement(){
-        if(count > 1){
-            setCount(count - 1)
-        }
-    }
+
 
     const submitTicket = async (e, camps) => {
         e.preventDefault();

@@ -9,13 +9,11 @@ import Loader from "./Loader";
 
 
 
-
 const ModalMyTickets =({open,close, id}) => {
     const [loadings, setLoading] = useState(true);
     const [camps, setCamps] = useState([]);
     const [childrens, setChildrens] = useState([]);
     const [tickets, setTickets] = useState([]);
-
 
 
     useEffect(()=>{
@@ -82,6 +80,7 @@ const ModalMyTickets =({open,close, id}) => {
         return id;
     }
 
+
     const handleDelete = async (e, id) =>{
         e.preventDefault();
         console.log(id)
@@ -97,35 +96,36 @@ const ModalMyTickets =({open,close, id}) => {
 
     return (
         loadings ? <Loader/> :
-            <div className='overlay modalBack modalAnimation'>
-                <div className='modalContainer'>
-                    <div className='modalRight '>
-                        <button className={'closeBtn btn-close'} onClick={close}/>
-                        <div className='content'>
-                            <h1 style={{marginBottom: "20px"}}>Мои билеты</h1>
-                            {childrens && childrens.map((childrens)=>
-                                <div style={{width:"100%"}}>
-                                    {tickets && tickets.map((tickets)=>(
-                                        childrens.id === tickets.ChildrenUID ?
-                                            <Form key={tickets.id}>
-                                                <h4>Ребенок: {childrens.name}</h4>
-                                                <h4>{camps[getIdCamp(tickets.CampTypeUID)].Title}<Link style={{fontSize:"20px", marginLeft:"5px"}} to={"/camps"}>Подробнее</Link></h4>
-                                                <div className={'d-flex'}>
-                                                    <Image className="imgcampmodal" src={camps[getIdCamp(tickets.CampTypeUID)].Image}/>
-                                                    <div style={{display:"flex", justifyContent:"end", alignItems:"end", marginBottom:"10px"}}>
+                <div className='overlay modalBack modalAnimation'>
+                    <div className='modalContainer'>
+                        <div className='modalRight '>
+                            <button className={'closeBtn btn-close'} onClick={close}/>
+                            <div className='content'>
+                                <h1 style={{marginBottom: "20px"}}>Мои билеты</h1>
+                                {childrens && childrens.map((childrens)=>
+                                    <div style={{width:"100%"}}>
+                                        {tickets && tickets.map((tickets)=>(
+                                            childrens.id === tickets.ChildrenUID ?
+                                                <Form key={tickets.id}>
+                                                    <h4>Ребенок: {childrens.name}</h4>
+                                                    <h4>{camps[getIdCamp(tickets.CampTypeUID)].Title}<Link style={{fontSize:"20px", marginLeft:"5px"}} to={"/camps"}>Подробнее</Link></h4>
+                                                    <div className={'d-flex'}>
+                                                        <Image className="imgcampmodal" src={camps[getIdCamp(tickets.CampTypeUID)].Image}/>
+                                                        <div style={{display:"flex", justifyContent:"end", alignItems:"end", marginBottom:"10px"}}>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <button onClick={(e) => handleDelete(e, tickets.id)} style={{marginTop: '10px'}} className={'button'}>Удалить билет</button>
-                                                <hr/>
-                                            </Form>
-                                            : null
-                                    ))}
-                                </div>
-                            )}
+                                                    <button onClick={(e) => handleDelete(e, tickets.id)} style={{marginTop: '10px'}} className={'button'}>Удалить билет</button>
+                                                    <hr/>
+                                                </Form>
+                                                : null
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         </div>
+
                     </div>
                 </div>
-            </div>
     );
 };
 

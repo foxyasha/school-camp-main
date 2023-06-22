@@ -12,11 +12,10 @@ import Loader from "./Loader";
 
 const ModalSchedule =({open,close, id}) => {
     const [loadings, setLoading] = useState(true);
+    const [schedule, setSchedule] = useState([]);
     const [camps, setCamps] = useState([]);
     const [childrens, setChildrens] = useState([]);
     const [tickets, setTickets] = useState([]);
-
-
 
     useEffect(()=>{
         setLoading(true);
@@ -82,17 +81,24 @@ const ModalSchedule =({open,close, id}) => {
         return id;
     }
 
-    const handleDelete = async (e, id) =>{
-        e.preventDefault();
-        console.log(id)
-        try{
-            await deleteDoc(doc(db, "Tickets", id));
-            setChildrens(tickets.filter((tickets) => tickets.id !== id))
-            ValidData('Данные удалены успешно!', true)
-        } catch(err){
-            console.log(err);
+    useEffect(()=>{
+        setLoading(true);
+        const unsub = onSnapshot(collection(db,"Schedule"), (snapshot) =>{
+            let list = [];
+            snapshot.docs.forEach((doc) =>{
+                list.push({id: doc.id, ...doc.data()})
+            });
+            setSchedule(list);
+            setLoading(false);
+        }, (error)=>{
+            console.log(error);
+        })
+        return() =>{
+            unsub();
         }
-    }
+    }, []);
+
+
 
     if (!open) return null;
 
@@ -103,25 +109,47 @@ const ModalSchedule =({open,close, id}) => {
                     <div className='modalRight '>
                         <button className={'closeBtn btn-close'} onClick={close}/>
                         <div className='content'>
-                            <h1 style={{marginBottom: "20px"}}>Мои билеты</h1>
+                            <h1 style={{marginBottom: "20px"}}>Расписание</h1>
                             {childrens && childrens.map((childrens)=>
-                                <div style={{width:"100%"}}>
-                                    <h4>Ребенок: {childrens.name}</h4>
 
-                                    {tickets && tickets.map((tickets)=>(
-                                        childrens.id === tickets.ChildrenUID ?
-                                            <Form key={tickets.id}>
-                                                <h4>{camps[getIdCamp(tickets.CampTypeUID)].Title}<Link style={{fontSize:"20px", marginLeft:"5px"}} to={"/camps"}>Подробнее</Link></h4>
-                                                <div className={'d-flex'}>
-                                                    <Image className="imgcampmodal" src={camps[getIdCamp(tickets.CampTypeUID)].Image}/>
-                                                    <div style={{display:"flex", justifyContent:"end", alignItems:"end", marginBottom:"10px"}}>
-                                                    </div>
+                                <div style={{width:"100%"}}>
+                                {tickets && tickets.map((tickets)=>(
+                                    childrens.id === tickets.ChildrenUID ?
+                                        <Form>
+                                            <h4>Ребенок: {childrens.name}</h4>
+                                            <h4>{camps[getIdCamp(tickets.CampTypeUID)].Title}</h4>
+                                            {camps && camps.map((camps)=>
+                                                <div>
+                                                    {schedule && schedule.map((schedule) =>
+                                                        camps.id === schedule.campTypeUid ?
+                                                            <table>
+                                                                <tr>
+                                                                    <th> </th>
+                                                                    <th>Понедельник</th>
+                                                                    <th>Вторник</th>
+                                                                    <th>Среда</th>
+                                                                    <th>Четверг</th>
+                                                                    <th>Пятница</th>
+                                                                    <th>Суббота</th>
+                                                                    <th>Воскресенье</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>{schedule.time}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>February</td>
+                                                                    <td>$80</td>
+                                                                </tr>
+                                                            </table>
+                                                            : null
+                                                    )}
                                                 </div>
-                                                <button onClick={(e) => handleDelete(e, tickets.id)} style={{marginTop: '10px'}} className={'button'}>Удалить билет</button>
-                                                <hr/>
-                                            </Form>
-                                            : null
-                                    ))}
+
+
+                                            )}
+                                        </Form>
+                                        : null
+                                ))}
                                 </div>
                             )}
                         </div>

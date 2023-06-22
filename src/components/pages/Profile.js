@@ -13,6 +13,7 @@ import ValidData from "../../ValidData";
 import Modal from "../UI/ModalComp";
 import ModalTicket from "../UI/ModalTicket";
 import ModalMyTickets from "../UI/ModalMyTickets";
+import ModalSchedule from "../UI/ModalSchedule";
 
 
 const initialState = {
@@ -32,6 +33,7 @@ const Profile = () => {
     const [openModal, setOpenModal] = useState(false)
     const [openModalTicket, setOpenModalTicket] = useState(false)
     const [openModalMyTicket, setOpenModalMyTicket] = useState(false)
+    const [openModalSchedule, setOpenModalSchedule] = useState(false)
     const [childrens, setChildrens] = useState([]);
     const userUID = auth.currentUser?.uid;
 
@@ -86,7 +88,9 @@ const Profile = () => {
     const handleClickMyTicket = (item) =>{
         setOpenModalMyTicket(true)
     }
-
+    const handleClickSchedule = (item) =>{
+        setOpenModalSchedule(true)
+    }
 
     const handleDelete = async (id) =>{
             try{
@@ -119,7 +123,7 @@ const Profile = () => {
                                     <li onClick={() => handleClick()} className="to-left">Добавить ребенка</li>
                                     <li onClick={() => handleClickTicket()} className="to-left">Доступные отряды</li>
                                     <li onClick={() => handleClickMyTicket()} className="to-left">Мои билеты</li>
-
+                                    <li onClick={() => handleClickSchedule()} className="to-left">Расписания</li>
                                 </ul>
                             </div>
                         </div>
@@ -169,10 +173,11 @@ const Profile = () => {
                     </div>
 
                 </Container>
-
                 <Modal open={openModal} close={() => {setOpenModal(false)}}  />
                 <ModalTicket open={openModalTicket} close={() => {setOpenModalTicket(false)}}  />
                 <ModalMyTickets open={openModalMyTicket} close={() => {setOpenModalMyTicket(false)}}  />
+                <ModalSchedule open={openModalSchedule} close={() => {setOpenModalSchedule(false)}}/>
+
             </div>
     );
 
