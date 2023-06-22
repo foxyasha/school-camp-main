@@ -17,16 +17,12 @@ const initialState = {
 };
 
 const ModalTicket =({open,close, id}) => {
-    const navigate = useNavigate();
-    const [user, loading] = useAuthState(auth);
     const [count, setCount] = useState(1)
     const [data, setData] = useState(initialState);
-    const [isSubmit, setIsSubmit] = useState(false);
     const [loadings, setLoading] = useState(true);
     const [camps, setCamps] = useState([]);
     const [childrens, setChildrens] = useState([]);
     const [selectedChild, setselectedChild] = useState([]);
-    const [selectedCamp, setselectedCamp] = useState([]);
 
     useEffect(()=>{
         setLoading(true);

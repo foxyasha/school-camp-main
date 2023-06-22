@@ -72,9 +72,7 @@ const Head = () => {
         navigate("/addCampType")
     }
 
-    const profile = () =>{
-        navigate("/profile")
-    }
+
 
     function openWindow() {
         document.getElementById("myDropdown").classList.toggle("show");

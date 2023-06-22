@@ -47,7 +47,11 @@ return (
                     <Image className="image3" src={"https://static.honeykidsasia.com/wp-content/uploads/2021/03/school-camp-activities.jpeg"}/>
                         </div>
                         </div>
-                        <Swipers news={news}/>
+                        <div className={"container"} style={{marginTop:"50px"}}>
+                            <h1 style={{display:"flex" }}>Новости</h1>
+                            <Swipers news={news}/>
+                        </div>
+
                         </div>
                         );
                     }

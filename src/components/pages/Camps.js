@@ -63,6 +63,8 @@ const Camps = () => {
         }
     }
 
+
+
     return (
         loadings ? <Loader/> :
         <>
@@ -81,6 +83,11 @@ const Camps = () => {
                             <button className='button' style={{width: "150px", height: "50px", fontWeight: "500", fontSize: "18px", float: "left", marginRight: "10px"}}
                                     onClick={() => navigate(`/updateCampType/${camps.id}`)}>
                                 <span className='bold'>Изменить</span>
+                            </button>
+
+                            <button className='button' style={{width: "150px", height: "50px", fontWeight: "500", fontSize: "18px", float: "left", marginRight: "10px"}}
+                                    onClick={() => navigate(`/addSchedule/${camps.id}`)}>
+                                <span className='bold'>Добавить расписание</span>
                             </button>
 
                             <button style={{width: "150px", height: "50px", float: "right", fontWeight: "400", marginLeft: "10px"}} className="button"

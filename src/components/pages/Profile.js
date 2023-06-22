@@ -152,21 +152,24 @@ const Profile = () => {
                             <h3>Информация о детях</h3>
                             {childrens && childrens.map((childrens)=>(
                                 <div className="children-info">
-                                <div>
-                                    <h6>ФИО</h6>
-                                    <p>{childrens.surname} {childrens.name} {childrens.patronymic}</p>
-                                </div>
-                                <div>
-                                    <h6>Дата рождения</h6>
-                                    <p>{childrens.birthday}</p>
-                                </div>
-                                    <div >
-                                        <button onClick={() => handleDelete(childrens.id)} className="btn"><img src={deletebutton} style={{width:"25px", height: "25px"}}></img></button>
+                                    <div>
+                                        <h6>ФИО</h6>
+                                        <p>{childrens.surname} {childrens.name} {childrens.patronymic}</p>
                                     </div>
-                            </div>
-                                ))}
+                                    <div>
+                                        <h6>Дата рождения</h6>
+                                        <p>{childrens.birthday}</p>
+                                    </div>
+                                        <div>
+                                            <button onClick={() => handleDelete(childrens.id)} className="btn"><img src={deletebutton} style={{width:"25px", height: "25px"}}></img></button>
+                                        </div>
+                                </div>
+                            ))}
+
                         </div>
+
                     </div>
+
 
                 </Container>
                 <Modal open={openModal} close={() => {setOpenModal(false)}}  />

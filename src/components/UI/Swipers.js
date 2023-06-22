@@ -21,7 +21,7 @@ const Swipers = (props) =>{
 
 
     return (
-        <Container style = {{height: "300px"}}>
+        <div style = {{height: "400px", marginBottom:"30px"}}>
 
             <Swiper
                 spaceBetween={30}
@@ -37,21 +37,21 @@ const Swipers = (props) =>{
                 navigation={true}
                 modules={[Autoplay, Pagination, Navigation]}
                 onAutoplayTimeLeft={onAutoplayTimeLeft}
-                className="mySwiper"
+                className="mySwiper imageswiper"
             >
                 {props.news && props.news.map((news)=>(
                     <SwiperSlide key={news.id}>
-                        <Image src={news.Image} className="imageswiper" onClick={() => navigate(`/news/${news.id}`)}/>
+                        <Image src={news.Image}  onClick={() => navigate(`/news/${news.id}`)}/>
                     </SwiperSlide>
                 ))}
-                <div className="autoplay-progress" slot="container-end">
+                <div className="autoplay-progress " slot="container-end">
                     <svg viewBox="0 0 48 48" ref={progressCircle}>
                         <circle cx="24" cy="24" r="20"></circle>
                     </svg>
                     <span ref={progressContent}></span>
                 </div>
             </Swiper>
-        </Container>
+        </div>
     );
 }
 export default Swipers;
