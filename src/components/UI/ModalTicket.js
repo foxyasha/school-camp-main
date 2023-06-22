@@ -17,12 +17,17 @@ const initialState = {
 };
 
 const ModalTicket =({open,close, id}) => {
+    const navigate = useNavigate();
+    const [user, loading] = useAuthState(auth);
     const [count, setCount] = useState(1)
     const [data, setData] = useState(initialState);
+    const [isSubmit, setIsSubmit] = useState(false);
     const [loadings, setLoading] = useState(true);
     const [camps, setCamps] = useState([]);
     const [childrens, setChildrens] = useState([]);
+    const [tickets, setTickets] = useState([]);
     const [selectedChild, setselectedChild] = useState([]);
+    const [selectedCamp, setselectedCamp] = useState([]);
 
     useEffect(()=>{
         setLoading(true);
@@ -60,6 +65,23 @@ const ModalTicket =({open,close, id}) => {
         }
     }, []);
 
+    useEffect(()=>{
+        setLoading(true);
+        const unsub = onSnapshot(collection(db,"Tickets"), (snapshot) =>{
+            let list = [];
+            snapshot.docs.forEach((doc) =>{
+                list.push({id: doc.id, ...doc.data()})
+            });
+            setTickets(list);
+            setLoading(false);
+        }, (error)=>{
+            console.log(error);
+        })
+        return() =>{
+            unsub();
+        }
+    }, []);
+
     if (!open) return null;
     function increment(){
         setCount(count + 1)
@@ -72,7 +94,19 @@ const ModalTicket =({open,close, id}) => {
 
     const submitTicket = async (e, camps) => {
         e.preventDefault();
-        console.log(selectedChild)
+        console.log(tickets)
+        let isInTicket = false;
+
+        tickets.forEach(el => {
+            console.log(el.ChildrenUID, selectedChild.id)
+            if (el.ChildrenUID === selectedChild.id) {
+                return isInTicket = true
+            }
+        })
+
+        if (isInTicket)
+            return  ValidData('Ребенок уже состоит в одном из отрядов', false)
+
         if (selectedChild.length != 0) {
             await addDoc(collection(db, "Tickets"), {
                 Date: new Date().toISOString().slice(0, 10),
@@ -101,7 +135,6 @@ const ModalTicket =({open,close, id}) => {
                                         {selectedChild.name || 'Выберите ребенка'}
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
-
                                         <Dropdown.Item  onClick={() => setselectedChild([])}>Выберите ребенка</Dropdown.Item>
                                         {childrens && childrens.map((childrens)=>
                                             <Dropdown.Item onClick={() => setselectedChild(childrens)}>{childrens.name}</Dropdown.Item>
@@ -131,5 +164,3 @@ const ModalTicket =({open,close, id}) => {
 };
 
 export default ModalTicket;
-
-

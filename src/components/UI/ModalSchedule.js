@@ -10,7 +10,7 @@ import Loader from "./Loader";
 
 
 
-const ModalMyTickets =({open,close, id}) => {
+const ModalSchedule =({open,close, id}) => {
     const [loadings, setLoading] = useState(true);
     const [camps, setCamps] = useState([]);
     const [childrens, setChildrens] = useState([]);
@@ -87,6 +87,7 @@ const ModalMyTickets =({open,close, id}) => {
         console.log(id)
         try{
             await deleteDoc(doc(db, "Tickets", id));
+            setChildrens(tickets.filter((tickets) => tickets.id !== id))
             ValidData('Данные удалены успешно!', true)
         } catch(err){
             console.log(err);
@@ -105,10 +106,11 @@ const ModalMyTickets =({open,close, id}) => {
                             <h1 style={{marginBottom: "20px"}}>Мои билеты</h1>
                             {childrens && childrens.map((childrens)=>
                                 <div style={{width:"100%"}}>
+                                    <h4>Ребенок: {childrens.name}</h4>
+
                                     {tickets && tickets.map((tickets)=>(
                                         childrens.id === tickets.ChildrenUID ?
                                             <Form key={tickets.id}>
-                                                <h4>Ребенок: {childrens.name}</h4>
                                                 <h4>{camps[getIdCamp(tickets.CampTypeUID)].Title}<Link style={{fontSize:"20px", marginLeft:"5px"}} to={"/camps"}>Подробнее</Link></h4>
                                                 <div className={'d-flex'}>
                                                     <Image className="imgcampmodal" src={camps[getIdCamp(tickets.CampTypeUID)].Image}/>
@@ -129,4 +131,4 @@ const ModalMyTickets =({open,close, id}) => {
     );
 };
 
-export default ModalMyTickets;
+export default ModalSchedule;

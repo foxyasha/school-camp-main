@@ -165,13 +165,11 @@ const Profile = () => {
                                         </div>
                                 </div>
                             ))}
-
                         </div>
-
                     </div>
 
-
                 </Container>
+
                 <Modal open={openModal} close={() => {setOpenModal(false)}}  />
                 <ModalTicket open={openModalTicket} close={() => {setOpenModalTicket(false)}}  />
                 <ModalMyTickets open={openModalMyTicket} close={() => {setOpenModalMyTicket(false)}}  />
