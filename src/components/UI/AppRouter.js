@@ -11,6 +11,8 @@ import AddCampType from "../pages/AddCampType";
 import Camps from "../pages/Camps";
 import EditProfile from "../pages/EditProfile";
 import AddSchedule from "../pages/AddSchedule";
+import Docs from "../pages/Docs";
+import About from "../pages/About";
 
 const AppRouter = () => {
 
@@ -30,6 +32,8 @@ const AppRouter = () => {
                 <Route path="/addSchedule/:id" element={<AddSchedule/>}/>
                 <Route path="/updateCampType/:id" element={<AddCampType/>}/>
                 <Route path="/camps" element={<Camps/>}/>
+                <Route path="/docs" element={<Docs/>}/>
+                <Route path="/about" element={<About/>}/>
                 <Route path="*" element={<Navigate to="/" replace/>}/>
             </Routes>
         );

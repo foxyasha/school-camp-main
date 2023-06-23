@@ -109,8 +109,8 @@ const Head = () => {
                     <div className="dropdown">
                         <button className="button dropbtn" onClick={openWindow}>Информация</button>
                         <div id="myDropdown" className="dropdown-content">
-                            <a href="#">Основная информация</a>
-                            <a href="#">Нормативные документы</a>
+                            <a href="/about">Основная информация</a>
+                            <a href="/docs">Нормативные документы</a>
                             <a href="/camps">Лагеря и отряды</a>
                         </div>
                     </div>
