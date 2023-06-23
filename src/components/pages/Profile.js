@@ -35,7 +35,6 @@ const Profile = () => {
     const [openModalMyTicket, setOpenModalMyTicket] = useState(false)
     const [openModalSchedule, setOpenModalSchedule] = useState(false)
     const [childrens, setChildrens] = useState([]);
-    const userUID = auth.currentUser?.uid;
 
     useEffect(() =>{
         id && getSingleUser();

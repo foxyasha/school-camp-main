@@ -119,31 +119,30 @@ const ModalSchedule =({open,close, id}) => {
                                             <h4>Ребенок: {childrens.name}</h4>
                                             <h4>{camps[getIdCamp(tickets.CampTypeUID)].Title}</h4>
                                             {camps && camps.map((camps)=>
+                                                camps.id === tickets.CampTypeUID ?
                                                 <div>
-                                                    {schedule && schedule.map((schedule) =>
-                                                        camps.id === schedule.campTypeUid ?
-                                                            <table>
-                                                                <tr>
-                                                                    <th> </th>
-                                                                    <th>Понедельник</th>
-                                                                    <th>Вторник</th>
-                                                                    <th>Среда</th>
-                                                                    <th>Четверг</th>
-                                                                    <th>Пятница</th>
-                                                                    <th>Суббота</th>
-                                                                    <th>Воскресенье</th>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>{schedule.time}</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>February</td>
-                                                                    <td>$80</td>
-                                                                </tr>
-                                                            </table>
-                                                            : null
-                                                    )}
+                                                    <table>
+                                                        <tr>
+                                                            <th> </th>
+                                                            <th>Понедельник</th>
+                                                            <th>Вторник</th>
+                                                            <th>Среда</th>
+                                                            <th>Четверг</th>
+                                                            <th>Пятница</th>
+                                                            <th>Суббота</th>
+                                                            <th>Воскресенье</th>
+                                                        </tr>
+                                                        {schedule && schedule.map((schedule) =>
+                                                            camps.id === schedule.campTypeUid ?
+                                                        <tr>
+                                                            <td>{schedule.time}</td>
+                                                            <td>{schedule.event}</td>
+                                                        </tr>
+                                                                : null
+                                                        )}
+                                                    </table>
                                                 </div>
+                                                    : null
 
 
                                             )}

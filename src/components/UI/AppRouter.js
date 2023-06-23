@@ -1,5 +1,5 @@
 import React, {Component, useEffect, useState} from 'react';
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Registration from "../pages/Registration";
@@ -30,6 +30,7 @@ const AppRouter = () => {
                 <Route path="/addSchedule/:id" element={<AddSchedule/>}/>
                 <Route path="/updateCampType/:id" element={<AddCampType/>}/>
                 <Route path="/camps" element={<Camps/>}/>
+                <Route path="*" element={<Navigate to="/" replace/>}/>
             </Routes>
         );
 

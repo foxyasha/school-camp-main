@@ -1,10 +1,12 @@
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage"
-import {addDoc, serverTimestamp, collection, doc, updateDoc, getDoc} from "firebase/firestore"
-import {db, storage} from "../UI/firebaseConfig";
-import {useEffect, useState} from "react";
+import {addDoc, serverTimestamp, collection, doc, updateDoc, getDoc, onSnapshot} from "firebase/firestore"
+import {auth, db, storage} from "../UI/firebaseConfig";
+import React, {useEffect, useState} from "react";
 import ValidData from "../../ValidData";
 import {Form} from "react-bootstrap";
+import {useAuthState} from "react-firebase-hooks/auth";
+import Loader from "../UI/Loader";
 
 
 const initialState = {
@@ -24,6 +26,9 @@ const AddNews = () => {
     const {Title, Description} = data;
     const { id } = useParams();
     const navigate = useNavigate();
+    const [user, loading] = useAuthState(auth);
+    const [role, setRole] = useState([])
+    const [loadings, setLoading] = useState(true);
 
 
     useEffect(()=>{
@@ -110,6 +115,23 @@ const AddNews = () => {
         id && getSingleNews();
     }, [id]);
 
+
+    useEffect(()=>{
+        const unsub = onSnapshot(collection(db,"Users"), (snapshot) =>{
+            snapshot.docs.forEach((doc) =>{
+                if(auth.currentUser?.uid === doc.data().userUid){
+                    setRole(doc.data().role)
+                    setLoading(false)
+                }
+            });
+        }, (error)=>{
+            console.log(error);
+        })
+        return() =>{
+            unsub();
+        }
+    }, []);
+
     const getSingleNews = async () =>{
         const docRef = doc(db, "News", id);
         const snapshot = await getDoc(docRef);
@@ -145,8 +167,16 @@ const AddNews = () => {
     }
 
 
+    if(!user || !role){
+        console.log(role)
+        navigate("/")
+    }
+
+
+
     return (
-        <div className={'modalwindow login'}>
+        loadings ? <Loader/> :
+            <div className={'modalwindow login'}>
             <div className={'form'}>
                 <div className={'form_content'}>
                     <h1>{id ? "Изменить новость" : "Добавить новость"}</h1>

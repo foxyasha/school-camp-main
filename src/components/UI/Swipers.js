@@ -41,7 +41,7 @@ const Swipers = (props) =>{
             >
                 {props.news && props.news.map((news)=>(
                     <SwiperSlide key={news.id}>
-                        <Image src={news.Image}  onClick={() => navigate(`/news/${news.id}`)}/>
+                        <Image src={news.Image} onClick={() => navigate(`/news/${news.id}`)}/>
                     </SwiperSlide>
                 ))}
                 <div className="autoplay-progress " slot="container-end">

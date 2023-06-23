@@ -1,20 +1,42 @@
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {addDoc, serverTimestamp, collection, doc, updateDoc, getDoc, onSnapshot} from "firebase/firestore"
-import {db, storage} from "../UI/firebaseConfig";
+import {auth, db, storage} from "../UI/firebaseConfig";
 import 'firebase/firestore';
 import React, {useEffect, useState} from "react";
 import ValidData from "../../ValidData";
 import {Dropdown, Form} from "react-bootstrap";
+import {useAuthState} from "react-firebase-hooks/auth";
+import Loader from "../UI/Loader";
 
 
 
 const AddSchedule = () => {
 
     const { id } = useParams();
-
+    const navigate = useNavigate();
+    const [user, loading] = useAuthState(auth);
     const [day, setDay] = useState('');
     const [time, setTime] = useState('');
     const [event, setEvent] = useState('');
+    const [role, setRole] = useState([])
+    const [loadings, setLoading] = useState(true);
+
+    useEffect(()=>{
+        const unsub = onSnapshot(collection(db,"Users"), (snapshot) =>{
+            snapshot.docs.forEach((doc) =>{
+                if(auth.currentUser?.uid === doc.data().userUid){
+                    setRole(doc.data().role)
+                    setLoading(false)
+                }
+            });
+        }, (error)=>{
+            setLoading(true)
+            console.log(error);
+        })
+        return() =>{
+            unsub();
+        }
+    }, []);
 
     const handleDayChange = (e) => {
         setDay(e.target.value);
@@ -50,11 +72,15 @@ const AddSchedule = () => {
         }
     };
 
+    if(!user || !role){
+        navigate("/")
+    }
 
 
 
     return (
-        <div className={'modalwindow login'}>
+        loadings ? <Loader/> :
+            <div className={'modalwindow login'}>
             <div className={'form'}>
                 <div className={'form_content'}>
                     <h1>Добавить расписание</h1>
