@@ -65,13 +65,14 @@ const ModalSchedule =({open,close, id}) => {
         onSnapshot(collection(db,"Schedule"), (snapshot) =>{
             let list = [];
             let time = [];
+
             snapshot.docs.forEach((doc) =>{
                 list.push({id: doc.id, ...doc.data()})
                 if (!time.includes(doc.data().time)) {
                     time.push(doc.data().time)
                 }
             });
-            setSchedule(list);
+            setSchedule(list.sort((a, b) => a.time > b.time ? 1 : -1));
             setTime(time.sort())
             setLoading(false);
         }, (error)=>{
@@ -95,8 +96,8 @@ const ModalSchedule =({open,close, id}) => {
     return (
         loadings ? <Loader/> :
             <div  className='overlay modalBack modalAnimation'>
-                <div style={{maxWidth: '850px'}} className='modalContainer'>
-                    <div style={{width: '850px'}} className='modalRight '>
+                <div style={{maxWidth: 'none'}} className='modalContainer'>
+                    <div style={{width: 'auto'}} className='modalRight '>
                         <button className={'closeBtn btn-close'} onClick={close}/>
                         <div className='content'>
                             <h1 style={{marginBottom: "20px"}}>Расписание</h1>
@@ -116,25 +117,26 @@ const ModalSchedule =({open,close, id}) => {
                                                             <th>Время</th>
                                                             {dayWeek.map(day => <th>{day}</th>)}
                                                         </tr>
-                                                        {/*{schedule && schedule.map((schedule) =>
-                                                            camps.id === schedule.campTypeUid ?
-                                                        <tr>
-                                                            {time.map(time => <td>{time}</td>)}
-                                                            {dayWeek.map(day => <td>{schedule.day === day ? schedule.event : null}</td>)}
-                                                        </tr>
-                                                                : null
-                                                        )}*/}
-
-                                                        {time.map(time =>
-                                                            <tr>
-                                                                <td>{time}</td>
-                                                                {schedule && schedule.map((schedule) =>
-                                                                    camps.id === schedule.campTypeUid ?
-                                                                        time === schedule.time ? dayWeek.map(day => schedule.day === day ? <td>{schedule.event}</td> : null) : <td></td>
-                                                                    : null
-                                                                )}
-                                                            </tr>
-                                                        )}
+                                                        {time.map((time) =>
+                                                        {
+                                                            return (
+                                                                <tr>
+                                                                    <td>{time}</td>
+                                                                    {dayWeek.map(day =>
+                                                                            schedule && schedule.map(schedule =>
+                                                                                camps.id === schedule.campTypeUid
+                                                                                    ? time === schedule.time
+                                                                                        ? schedule.day === day
+                                                                                            ? <td>{schedule.event}</td>
+                                                                                            : null
+                                                                                        : null
+                                                                                    : null
+                                                                            )
+                                                                        )
+                                                                    }
+                                                                </tr>
+                                                            )
+                                                        })}
                                                     </table>
                                                 </div>
                                                     : null

@@ -15,11 +15,20 @@ const AddSchedule = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [user, loading] = useAuthState(auth);
-    const [day, setDay] = useState('');
     const [time, setTime] = useState('');
-    const [event, setEvent] = useState('');
+    const [event, setEvent] = useState([]);
+    const [isOneEvent, setIsOneEvent] = useState(false);
     const [role, setRole] = useState([])
     const [loadings, setLoading] = useState(true);
+    const dayWeek = [
+        "Понедельник",
+        "Вторник",
+        "Среда",
+        "Четверг",
+        "Пятница",
+        "Суббота",
+        "Воскресенье",
+    ];
 
     useEffect(()=>{
         const unsub = onSnapshot(collection(db,"Users"), (snapshot) =>{
@@ -38,37 +47,41 @@ const AddSchedule = () => {
         }
     }, []);
 
-    const handleDayChange = (e) => {
-        setDay(e.target.value);
-    };
-
     const handleTimeChange = (e) => {
         setTime(e.target.value);
     };
 
-    const handleEventChange = (e) => {
-        setEvent(e.target.value);
+    const handleEventChange = (e, index) => {
+        const updatedAreas = [...event];
+        updatedAreas[index] = e.target.value;
+        console.log(updatedAreas,e.target.value)
+        setEvent(updatedAreas);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const eventData = {
-                campTypeUid: id,
-                day: day,
-                time: time,
-                event: event,
-            };
-            const docRef = await addDoc(collection(db, 'Schedule'),{
-                ...eventData
-            })
-            setDay('');
-            setTime('');
-            setEvent('');
-            ValidData("Событие успешно добавлено", true)
-        } catch (error) {
-            console.error('Ошибка при добавлении события:', error);
+            for (let i = 0; i < dayWeek.length; i++) {
+                try {
+                    const eventData = {
+                        campTypeUid: id,
+                        day: dayWeek[i],
+                        time: time,
+                        event: event[isOneEvent ? 0 : i] ? event[isOneEvent ? 0 : i] : "-",
+                    };
+                    const docRef = await addDoc(collection(db, 'Schedule'),{
+                        ...eventData
+                    })
+                    setTime('');
+                    setEvent([]);
+                } catch (error) {
+                    console.error('Ошибка при добавлении события:', error);
+                }
+            }
+            ValidData("События успешно добавлено", true)
+        } catch (e) {
+            console.log(e)
         }
     };
 
@@ -85,18 +98,19 @@ const AddSchedule = () => {
                 <div className={'form_content'}>
                     <h1>Добавить расписание</h1>
                     <Form onSubmit={handleSubmit}>
-                            <select value={day} onChange={handleDayChange} style={{marginTop:"10px"}}>
-                                <option value="">Выберите день</option>
-                                <option value="Понедельник">Понедельник</option>
-                                <option value="Вторник">Вторник</option>
-                                <option value="Среда">Среда</option>
-                                <option value="Четверг">Четверг</option>
-                                <option value="Пятница">Пятница</option>
-                                <option value="Суббота">Суббота</option>
-                                <option value="Воскресенье">Воскресенье</option>
-                            </select>
-                            <input placeholder="Время" type="time" value={time} onChange={handleTimeChange} />
-                            <input placeholder="Событие" value={event} onChange={handleEventChange} />
+                        <input placeholder="Время" type="time" value={time} onChange={handleTimeChange} />
+                        <div className="form-check form-switch d-flex align-items-center">
+                            <input checked={isOneEvent} onChange={() => setIsOneEvent(!isOneEvent)} className="form-check-input px-5" type="checkbox" id="flexSwitchCheckDefault"/>
+                            <label className="form-check-label m-lg-3" htmlFor="flexSwitchCheckDefault">Одно событие на все дни</label>
+                        </div>
+                        {isOneEvent
+                            ? <input style={{width: "100%"}} placeholder="Событие" value={event[0]} onChange={(e) => handleEventChange(e, 0)} />
+                            : dayWeek.map((day, index) =>
+                                <div className={"d-flex justify-content-between align-items-center"}>
+                                    <h6>{day}:</h6>
+                                    <input style={{width: "200px"}} placeholder="Событие" value={event[index]} onChange={(e) => handleEventChange(e, index)} />
+                                </div>
+                            )}
                         <button type="submit" className="button">Добавить</button>
                     </Form>
                 </div>
