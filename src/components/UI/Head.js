@@ -9,16 +9,12 @@ import "bootstrap/dist/css/bootstrap.css"
 import {Container, Navbar, Spinner} from "react-bootstrap";
 import addCampType from "../pages/AddCampType";
 
-
 const Head = () => {
-
     const navigate = useNavigate();
     const [user, loading] = useAuthState(auth);
     const [role, setRole] = useState(false)
     const [loadings, setLoading] = useState(false);
     const [users, setUsers] = useState([]);
-
-
 
     useEffect(()=>{
         const unsub = onSnapshot(collection(db,"Users"), (snapshot) =>{
@@ -54,8 +50,6 @@ const Head = () => {
         }
     }, []);
 
-
-
     const logout = () =>{
         signOut(auth).then(() => {
             navigate("/");
@@ -72,7 +66,9 @@ const Head = () => {
         navigate("/addCampType")
     }
 
-
+    const profile = () =>{
+        navigate("/profile")
+    }
 
     function openWindow() {
         document.getElementById("myDropdown").classList.toggle("show");
@@ -92,13 +88,9 @@ const Head = () => {
         }
     }
 
-
-
-
-
     return (
-        <>
-            <Container className={'header'}>
+        <div className={'header'}>
+            <Container className={"d-flex justify-content-between align-items-center"}>
                 <div className={'header_logo'}>
                     <Navbar.Brand href="/">
                         <div>
@@ -109,8 +101,8 @@ const Head = () => {
                     <div className="dropdown">
                         <button className="button dropbtn" onClick={openWindow}>Информация</button>
                         <div id="myDropdown" className="dropdown-content">
-                            <a href="/about">Основная информация</a>
-                            <a href="/docs">Нормативные документы</a>
+                            <a href="#">Основная информация</a>
+                            <a href="#">Нормативные документы</a>
                             <a href="/camps">Лагеря и отряды</a>
                         </div>
                     </div>
@@ -141,8 +133,7 @@ const Head = () => {
                     </div>
                 </nav>
             </Container>
-        </>
-
+        </div>
     );
 }
 

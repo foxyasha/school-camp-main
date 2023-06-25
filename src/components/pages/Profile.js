@@ -176,7 +176,6 @@ const Profile = () => {
                 <ModalTicket open={openModalTicket} close={() => {setOpenModalTicket(false)}}  />
                 <ModalMyTickets open={openModalMyTicket} close={() => {setOpenModalMyTicket(false)}}  />
                 <ModalSchedule open={openModalSchedule} close={() => {setOpenModalSchedule(false)}}/>
-
             </div>
     );
 
